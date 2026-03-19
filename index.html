@@ -1,157 +1,219 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>Letter</title>
+<meta charset="UTF-8">
+<title>600 Days</title>
 
-  <!-- Pretendard -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Pretendard', sans-serif;
-      overflow: hidden;
-      background: linear-gradient(135deg, #ffd6e7, #ffe9f3);
-    }
+<style>
+body {
+  margin: 0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #ffe4ec, #fff5f8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
+}
 
-    /* 🎂 케이크 (이모티콘) */
-    .cake-container {
-      text-align: center;
-      cursor: pointer;
-      animation: fadeIn 1s ease;
-    }
+/* 공통 */
+.hidden { display: none; }
 
-    .cake {
-      font-size: 80px;
-      transition: transform 0.3s;
-    }
+/* 🎂 */
+.cake {
+  font-size: 72px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.cake:hover {
+  transform: scale(1.1);
+}
 
-    .cake-container:hover .cake {
-      transform: scale(1.2);
-    }
+/* 🔢 */
+.counter {
+  font-size: 48px;
+  font-weight: 600;
+  color: #ff5c8a;
+}
 
-    .cake-text {
-      margin-top: 15px;
-      font-size: 16px;
-      color: #555;
-    }
+/* 🎉 */
+.result {
+  font-size: 28px;
+  font-weight: 600;
+  color: #ff3e7f;
+  cursor: pointer;
+  transition: opacity 0.4s;
+}
 
-    /* 📩 편지 */
-    .letter {
-      display: none;
-      background: white;
-      width: 90%;
-      max-width: 420px;
-      padding: 40px 30px;
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+/* 📊 타임라인 */
+.timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: 320px;
+}
 
-      font-size: 16px;
-      line-height: 1.9;
-      letter-spacing: -0.3px;
+.timeline button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-      transform: scale(0.8) rotateX(30deg);
-      opacity: 0;
-    }
+.timeline button:hover {
+  transform: translateY(-2px);
+}
 
-    .show {
-      display: block;
-      animation: openLetter 1.2s ease forwards;
-    }
+/* 📸 카드 */
+.card {
+  margin-top: 20px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  width: 280px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  text-align: center;
 
-    @keyframes openLetter {
-      to {
-        transform: scale(1) rotateX(0);
-        opacity: 1;
-      }
-    }
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
 
-    .letter h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 20px;
-    }
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-    .letter p {
-      word-break: keep-all;
-    }
+.card img {
+  width: 100%;
+  border-radius: 12px;
+}
 
-    .signature {
-      margin-top: 25px;
-      text-align: right;
-      color: #555;
-    }
+.card p {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
 
-    /* 💗 하트 */
-    .heart {
-      position: absolute;
-      color: rgba(255, 105, 180, 0.4);
-      animation: float 6s linear infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(100vh); opacity: 0; }
-      20% { opacity: 1; }
-      100% { transform: translateY(-10vh); opacity: 0; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+/* 📩 편지 */
+.letter {
+  white-space: pre-line;
+}
+</style>
 </head>
 
 <body>
 
-<!-- 🎂 이모티콘 케이크 -->
-<div class="cake-container" onclick="openLetter()">
-  <div class="cake">🎂</div>
-  <div class="cake-text">케이크를 눌러봐</div>
-</div>
+<div id="app">
 
-<!-- 📩 편지 -->
-<div class="letter" id="letter">
-  <h2>Dear Seihyun,</h2>
+  <!-- 🎂 -->
+  <div id="cake" class="cake" onclick="start()">🎂</div>
 
-  <p>
-    안녕 내사랑 직접 못가니까 속상하고 아쉬워서 뭐라도 챙겨주고 싶은데 찾아보다가 뜬금없지만 보내봐.
-    여행도 많이 다니고 재밌게 보내고 있지? 너무 즐거워서 나 잊는 거 아닌지 몰라.
-    누나가 즐겁게 지내는 것도 좋지만 얼른 돌아와서 곁에 있으면 좋겠다ㅎㅎ 많이 보고 싶거든.
-    나 때문에 속상한 적도 있고 서로 옆에 없다보니까 힘들기도 하겠지만 여전히 사랑해줘서 고마워.
-    누난 존재만으로도 나한테 큰 힘이 되는 사람이야.
-    서로 떨어져있는 만큼 더 신경써서 챙겨줘야하는데 많이 부족해서 미안해.
-    별 거 아니긴 하지만 이런 거라도 미리 찾아봐서 조금이라도 더 챙겨줬으면 좋았을 텐데 후회되는 마음도 커...
-    우리 떨어져있는 지금, 그리고 앞으로 더 노력하고 사랑할게.
-    쓰고 유용하면 말해 또 보내줄게ㅎㅎ 많이 사랑해 &lt;3
-  </p>
+  <!-- 🔢 -->
+  <div id="counter" class="counter hidden">0</div>
 
-  <div class="signature">— From Siwoo</div>
+  <!-- 🎉 -->
+  <div id="result" class="result hidden" onclick="showTimeline()">
+    Happy 600 Days
+  </div>
+
+  <!-- 📊 -->
+  <div id="timeline" class="timeline hidden">
+    <button onclick="showContent('100')">100일</button>
+    <button onclick="showContent('200')">200일</button>
+    <button onclick="showContent('300')">300일</button>
+    <button onclick="showContent('1year')">1년</button>
+    <button onclick="showContent('400')">400일</button>
+    <button onclick="showContent('500')">500일</button>
+    <button onclick="showContent('letter')">💌 Letter</button>
+  </div>
+
+  <!-- 📸 -->
+  <div id="card" class="card hidden">
+    <img id="photo" src="">
+    <p id="text"></p>
+  </div>
+
 </div>
 
 <script>
-  function openLetter() {
-    document.querySelector('.cake-container').style.display = 'none';
+function start(){
+  hideAll();
+  const counter = show('counter');
 
-    const letter = document.getElementById('letter');
-    letter.classList.add('show');
-
-    // 💗 하트 생성
-    for (let i = 0; i < 20; i++) {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerHTML = "❤";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = (15 + Math.random() * 20) + "px";
-      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-      document.body.appendChild(heart);
+  let n=0;
+  const i=setInterval(()=>{
+    n++;
+    counter.innerText=n;
+    if(n>=600){
+      clearInterval(i);
+      hide('counter');
+      show('result');
     }
+  },4);
+}
+
+function showTimeline(){
+  hide('result');
+  show('timeline');
+}
+
+function showContent(type){
+  const card = show('card');
+  const photo = document.getElementById('photo');
+  const text = document.getElementById('text');
+
+  if(type==='100'){
+    photo.src='your100.jpg';
+    text.innerText='100일의 첫 추억';
   }
+  if(type==='200'){
+    photo.src='your200.jpg';
+    text.innerText='200일의 기억';
+  }
+  if(type==='300'){
+    photo.src='your300.jpg';
+    text.innerText='300일의 순간';
+  }
+  if(type==='1year'){
+    photo.src='your1year.jpg';
+    text.innerText='1주년';
+  }
+  if(type==='400'){
+    photo.src='your400.jpg';
+    text.innerText='400일';
+  }
+  if(type==='500'){
+    photo.src='your500.jpg';
+    text.innerText='500일';
+  }
+  if(type==='letter'){
+    photo.src='';
+    text.innerText=`안녕 내사랑...\n\n많이 사랑해 ❤️`;
+  }
+
+  setTimeout(()=>card.classList.add('show'),10);
+}
+
+/* 유틸 */
+function show(id){
+  const el = document.getElementById(id);
+  el.classList.remove('hidden');
+  return el;
+}
+function hide(id){
+  document.getElementById(id).classList.add('hidden');
+}
+function hideAll(){
+  ['cake','counter','result','timeline','card'].forEach(hide);
+}
 </script>
 
 </body>
