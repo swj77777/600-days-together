@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Letter</title>
 
-  <!-- Pretendard 폰트 -->
+  <!-- Pretendard -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
   <style>
@@ -14,29 +14,35 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+      font-family: 'Pretendard', sans-serif;
       overflow: hidden;
-
-      /* 💗 핑크 배경 */
       background: linear-gradient(135deg, #ffd6e7, #ffe9f3);
     }
 
-    /* 💗 떠다니는 하트 */
-    .heart {
-      position: absolute;
-      color: rgba(255, 105, 180, 0.4);
-      font-size: 20px;
-      animation: float 6s linear infinite;
+    /* 🎂 케이크 */
+    .cake-container {
+      text-align: center;
+      cursor: pointer;
     }
 
-    @keyframes float {
-      0% { transform: translateY(100vh) scale(1); opacity: 0; }
-      20% { opacity: 1; }
-      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    .cake-container img {
+      width: 200px;
+      transition: transform 0.3s;
+    }
+
+    .cake-container img:hover {
+      transform: scale(1.1);
+    }
+
+    .cake-text {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #555;
     }
 
     /* 📩 편지 */
     .letter {
+      display: none;
       background: white;
       width: 90%;
       max-width: 420px;
@@ -47,17 +53,19 @@
       font-size: 16px;
       line-height: 1.9;
       letter-spacing: -0.3px;
-      color: #222;
 
-      /* ✨ 오픈 애니메이션 */
       transform: scale(0.8) rotateX(30deg);
       opacity: 0;
+    }
+
+    .show {
+      display: block;
       animation: openLetter 1.2s ease forwards;
     }
 
     @keyframes openLetter {
       to {
-        transform: scale(1) rotateX(0deg);
+        transform: scale(1) rotateX(0);
         opacity: 1;
       }
     }
@@ -66,39 +74,43 @@
       margin-top: 0;
       margin-bottom: 20px;
       font-size: 20px;
-      font-weight: 600;
     }
 
     .letter p {
-      margin-bottom: 16px;
       word-break: keep-all;
     }
 
     .signature {
       margin-top: 25px;
       text-align: right;
-      font-size: 15px;
       color: #555;
+    }
+
+    /* 💗 하트 */
+    .heart {
+      position: absolute;
+      color: rgba(255, 105, 180, 0.4);
+      animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh); opacity: 0; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- 💗 하트 생성 -->
-<script>
-  for (let i = 0; i < 20; i++) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-    heart.style.fontSize = (15 + Math.random() * 20) + "px";
-    document.body.appendChild(heart);
-  }
-</script>
+<!-- 🎂 케이크 (수정된 안정 이미지) -->
+<div class="cake-container" onclick="openLetter()">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cake_icon.svg/512px-Cake_icon.svg.png" alt="cake">
+  <div class="cake-text">케이크를 눌러봐 🎂</div>
+</div>
 
-<div class="letter">
+<!-- 📩 편지 -->
+<div class="letter" id="letter">
   <h2>Dear Seihyun,</h2>
 
   <p>
@@ -115,6 +127,26 @@
 
   <div class="signature">— From Siwoo</div>
 </div>
+
+<script>
+  function openLetter() {
+    document.querySelector('.cake-container').style.display = 'none';
+
+    const letter = document.getElementById('letter');
+    letter.classList.add('show');
+
+    // 💗 하트 생성
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (15 + Math.random() * 20) + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+      document.body.appendChild(heart);
+    }
+  }
+</script>
 
 </body>
 </html>
