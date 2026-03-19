@@ -9,32 +9,32 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Pretendard', sans-serif;
   background: linear-gradient(135deg, #ffe4ec, #fff5f8);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  color: #333;
 }
 
 /* 공통 */
-.hidden { display: none; }
+.screen {
+  display: none;
+  text-align: center;
+}
+.active {
+  display: block;
+}
 
 /* 🎂 */
 .cake {
   font-size: 72px;
   cursor: pointer;
-  transition: transform 0.3s;
-}
-.cake:hover {
-  transform: scale(1.1);
 }
 
 /* 🔢 */
 .counter {
   font-size: 48px;
-  font-weight: 600;
   color: #ff5c8a;
 }
 
@@ -44,16 +44,14 @@ body {
   font-weight: 600;
   color: #ff3e7f;
   cursor: pointer;
-  transition: opacity 0.4s;
 }
 
-/* 📊 타임라인 */
+/* 📊 */
 .timeline {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  max-width: 320px;
 }
 
 .timeline button {
@@ -62,16 +60,10 @@ body {
   border-radius: 999px;
   background: white;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
-.timeline button:hover {
-  transform: translateY(-2px);
-}
-
-/* 📸 카드 */
+/* 📸 */
 .card {
   margin-top: 20px;
   background: white;
@@ -79,16 +71,6 @@ body {
   padding: 20px;
   width: 280px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  text-align: center;
-
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.4s ease;
-}
-
-.card.show {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .card img {
@@ -96,36 +78,29 @@ body {
   border-radius: 12px;
 }
 
-.card p {
-  margin-top: 12px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* 📩 편지 */
-.letter {
-  white-space: pre-line;
-}
 </style>
 </head>
 
 <body>
 
-<div id="app">
+<!-- 1️⃣ 케이크 -->
+<div id="screen1" class="screen active">
+  <div class="cake" onclick="start()">🎂</div>
+</div>
 
-  <!-- 🎂 -->
-  <div id="cake" class="cake" onclick="start()">🎂</div>
+<!-- 2️⃣ 카운트 -->
+<div id="screen2" class="screen">
+  <div class="counter" id="counter">0</div>
+</div>
 
-  <!-- 🔢 -->
-  <div id="counter" class="counter hidden">0</div>
+<!-- 3️⃣ 결과 -->
+<div id="screen3" class="screen">
+  <div class="result" onclick="goTimeline()">Happy 600 Days! 💖</div>
+</div>
 
-  <!-- 🎉 -->
-  <div id="result" class="result hidden" onclick="showTimeline()">
-    Happy 600 Days
-  </div>
-
-  <!-- 📊 -->
-  <div id="timeline" class="timeline hidden">
+<!-- 4️⃣ 타임라인 -->
+<div id="screen4" class="screen">
+  <div class="timeline">
     <button onclick="showContent('100')">100일</button>
     <button onclick="showContent('200')">200일</button>
     <button onclick="showContent('300')">300일</button>
@@ -135,52 +110,76 @@ body {
     <button onclick="showContent('letter')">💌 Letter</button>
   </div>
 
-  <!-- 📸 -->
-  <div id="card" class="card hidden">
-    <img id="photo" src="">
+  <div id="card" class="card" style="display:none;">
+    <img id="photo">
     <p id="text"></p>
   </div>
-
 </div>
 
 <script>
-function start(){
-  hideAll();
-  const counter = show('counter');
+function switchScreen(n){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen'+n).classList.add('active');
+}
 
+/* 🎂 → 카운트 */
+function start(){
+  switchScreen(2);
   let n=0;
+  const counter=document.getElementById('counter');
+
   const i=setInterval(()=>{
     n++;
     counter.innerText=n;
+
     if(n>=600){
       clearInterval(i);
-      hide('counter');
-      show('result');
+      setTimeout(()=>{
+        switchScreen(3);
+        fireworks();
+      },300);
     }
   },4);
 }
 
-function showTimeline(){
-  hide('result');
-  show('timeline');
+/* 🎉 → 타임라인 */
+function goTimeline(){
+  switchScreen(4);
 }
 
+/* 💥 */
+function fireworks(){
+  for(let i=0;i<30;i++){
+    const fw=document.createElement('div');
+    fw.innerHTML='✨';
+    fw.style.position='absolute';
+    fw.style.left=Math.random()*100+'vw';
+    fw.style.top=Math.random()*100+'vh';
+    document.body.appendChild(fw);
+
+    setTimeout(()=>fw.remove(),1000);
+  }
+}
+
+/* 📸 */
 function showContent(type){
-  const card = show('card');
-  const photo = document.getElementById('photo');
-  const text = document.getElementById('text');
+  const card=document.getElementById('card');
+  const photo=document.getElementById('photo');
+  const text=document.getElementById('text');
+
+  card.style.display='block';
 
   if(type==='100'){
     photo.src='your100.jpg';
-    text.innerText='100일의 첫 추억';
+    text.innerText='100일 추억';
   }
   if(type==='200'){
     photo.src='your200.jpg';
-    text.innerText='200일의 기억';
+    text.innerText='200일';
   }
   if(type==='300'){
     photo.src='your300.jpg';
-    text.innerText='300일의 순간';
+    text.innerText='300일';
   }
   if(type==='1year'){
     photo.src='your1year.jpg';
@@ -196,23 +195,8 @@ function showContent(type){
   }
   if(type==='letter'){
     photo.src='';
-    text.innerText=`안녕 내사랑...\n\n많이 사랑해 ❤️`;
+    text.innerText='여기에 편지 넣기';
   }
-
-  setTimeout(()=>card.classList.add('show'),10);
-}
-
-/* 유틸 */
-function show(id){
-  const el = document.getElementById(id);
-  el.classList.remove('hidden');
-  return el;
-}
-function hide(id){
-  document.getElementById(id).classList.add('hidden');
-}
-function hideAll(){
-  ['cake','counter','result','timeline','card'].forEach(hide);
 }
 </script>
 
