@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Letter</title>
 
-  <!-- 한글 감성 폰트 -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
   <style>
     body {
@@ -15,18 +15,20 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     }
 
     .letter {
-      font-family: 'Noto Serif KR', serif;
       background: #ffffff;
       padding: 50px 45px;
       width: 520px;
-      border-radius: 12px;
+      border-radius: 14px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 
-      line-height: 1.9;
       font-size: 17px;
+      line-height: 1.85;
+      letter-spacing: -0.3px;
       color: #222;
     }
 
@@ -40,12 +42,14 @@
     .letter p {
       margin-bottom: 18px;
       text-align: justify;
+      word-break: keep-all;
     }
 
     .signature {
       margin-top: 30px;
       text-align: right;
       font-size: 16px;
+      color: #444;
     }
   </style>
 </head>
