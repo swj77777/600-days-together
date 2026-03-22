@@ -1,152 +1,571 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>600 Days</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
 <style>
-body {
+:root {
+  --bg1: #ffe4ec;
+  --bg2: #fff5f8;
+  --bg3: #fffafc;
+  --accent: #ff5c8a;
+  --accent-strong: #ff3e7f;
+  --accent-soft: #ffe4ec;
+  --text: #2f2a2d;
+  --muted: #7f7278;
+  --shadow: 0 20px 50px rgba(255, 92, 138, 0.12);
+  --card-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
   margin: 0;
+}
+
+body {
   font-family: 'Pretendard', sans-serif;
-  background: linear-gradient(135deg, #ffe4ec, #fff5f8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.92), rgba(255,255,255,0) 36%),
+    linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
   overflow: hidden;
 }
 
+button {
+  font: inherit;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.card-shell {
+  position: relative;
+  width: min(92vw, 460px);
+  min-height: min(720px, 86svh);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 34px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  inset: auto auto 82% -40px;
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 135, 181, 0.18);
+  filter: blur(32px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.glow.bottom {
+  inset: auto -60px -80px auto;
+  background: rgba(255, 193, 218, 0.22);
+}
+
 .screen {
-  display: none;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.985);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    visibility 0.5s ease;
+  padding: 28px;
 }
 
-.active {
-  display: block;
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
-.cake {
-  font-size: 72px;
+.stack {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+  place-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.72);
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: 0 8px 18px rgba(255, 92, 138, 0.12);
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(28px, 6vw, 38px);
+  line-height: 1.18;
+  font-weight: 800;
+}
+
+.hero-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 300px;
+}
+
+.cake-btn {
+  width: 124px;
+  height: 124px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+  box-shadow:
+    0 16px 32px rgba(255, 92, 138, 0.18),
+    inset 0 1px 0 rgba(255,255,255,0.9);
   cursor: pointer;
-  animation: bounce 1.4s infinite;
+  font-size: 64px;
+  display: grid;
+  place-items: center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+  animation: floaty 1.8s ease-in-out infinite;
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+.cake-btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow:
+    0 22px 38px rgba(255, 92, 138, 0.24),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+.cake-btn:focus-visible,
+.primary-btn:focus-visible,
+.timeline-btn:focus-visible,
+.nav-btn:focus-visible,
+.close-btn:focus-visible {
+  outline: 3px solid rgba(255, 92, 138, 0.28);
+  outline-offset: 3px;
 }
 
 .cake-hint {
-  font-size: 12px;
-  color: #888;
-  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.counter-wrap {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+  place-items: center;
 }
 
 .counter {
-  font-size: 48px;
-  color: #ff5c8a;
+  font-size: clamp(56px, 14vw, 88px);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -0.04em;
 }
 
-.result {
-  font-size: 28px;
-  font-weight: 600;
-  color: #ff3e7f;
+.counter-label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.progress-bar {
+  width: min(260px, 72vw);
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.7);
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff94b8, #ff5c8a);
+  transition: width 0.06s linear;
+}
+
+.result-card {
+  width: 100%;
+  max-width: 320px;
+  padding: 26px 22px;
+  border-radius: var(--radius-xl);
+  background: rgba(255,255,255,0.84);
+  box-shadow: var(--card-shadow);
+  display: grid;
+  gap: 10px;
+  transform: scale(0.96);
+  opacity: 0;
+}
+
+.screen.active .result-card.show {
+  animation: popIn 0.55s ease forwards;
+}
+
+.result-title {
+  margin: 0;
+  font-size: clamp(28px, 7vw, 34px);
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.result-copy {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.primary-btn {
+  margin-top: 4px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff7aa5, #ff4d88);
+  color: white;
+  padding: 12px 18px;
   cursor: pointer;
-  animation: bounceText 1.2s infinite;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(255, 92, 138, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-@keyframes bounceText {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(255, 92, 138, 0.28);
+}
+
+.timeline-screen {
+  align-items: flex-start;
+  padding-top: 42px;
+  padding-bottom: 42px;
+}
+
+.timeline-wrap {
+  width: 100%;
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+}
+
+.timeline-header {
+  display: grid;
+  gap: 8px;
+}
+
+.timeline-title {
+  margin: 0;
+  font-size: clamp(26px, 6vw, 34px);
+  font-weight: 800;
+}
+
+.timeline-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .timeline {
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  display: grid;
   gap: 10px;
-  justify-content: center;
-  max-width: 360px;
-  padding: 0 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.timeline button {
+.timeline-btn {
+  position: relative;
   border: none;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 14px 14px 13px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.86);
+  box-shadow: var(--card-shadow);
   cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
+  text-align: left;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.timeline-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0,0,0,0.1);
+}
+
+.timeline-btn.active {
+  background: linear-gradient(135deg, rgba(255, 135, 181, 0.18), rgba(255,255,255,0.94));
+  box-shadow: 0 16px 34px rgba(255, 92, 138, 0.18);
+}
+
+.timeline-btn.visited::after {
+  content: '✓';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 12px;
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.timeline-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.timeline-sub {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: none;
-  justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  background: rgba(23, 18, 21, 0.5);
   padding: 20px;
-  box-sizing: border-box;
+  z-index: 20;
+}
+
+.modal.open {
+  display: flex;
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
+  width: min(92vw, 430px);
+  max-height: min(86svh, 760px);
+  overflow: auto;
+  background: rgba(255,255,255,0.96);
+  border-radius: 28px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.2);
+  transform: translateY(12px) scale(0.98);
+  opacity: 0;
+  animation: modalIn 0.28s ease forwards;
+}
+
+.modal-content.letter-mode {
+  background:
+    linear-gradient(180deg, rgba(255,247,250,0.98), rgba(255,255,255,0.98)),
+    white;
+}
+
+.modal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.modal-section {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.modal-progress {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.image-frame {
+  width: 100%;
   border-radius: 20px;
-  width: min(360px, 100%);
-  text-align: center;
-  box-sizing: border-box;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,240,246,1), rgba(255,255,255,1));
+  min-height: 220px;
+  display: grid;
+  place-items: center;
 }
 
 .modal img {
   width: 100%;
-  border-radius: 12px;
+  max-height: 52svh;
+  object-fit: contain;
   display: block;
+  background: #fff;
+}
+
+.img-fallback {
+  display: none;
+  padding: 22px;
+  text-align: center;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.modal.no-image .image-frame {
+  min-height: 0;
+  background: transparent;
+}
+
+.modal.no-image #modal-img,
+.modal.no-image #img-fallback {
+  display: none !important;
 }
 
 #modal-text {
-  margin: 14px 0 6px;
-  line-height: 1.7;
-  color: #444;
+  margin: 16px 2px 12px;
+  line-height: 1.82;
+  color: #433b40;
   white-space: pre-line;
   font-size: 15px;
+  min-height: 54px;
+  text-align: left;
+}
+
+.letter-mode #modal-text {
+  margin-top: 14px;
+  padding: 18px 16px;
+  border-radius: 18px;
+  background: rgba(255, 250, 252, 0.95);
+  border: 1px solid rgba(255, 215, 229, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.modal-tip {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: -2px;
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .nav-wrap {
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nav-group {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn,
+.close-btn {
+  border: none;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
 }
 
 .nav-btn {
-  margin: 0 5px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 10px;
-  background: #ffe4ec;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
+  min-width: 70px;
+  padding: 10px 12px;
+  font-weight: 700;
 }
 
-.close {
-  margin-top: 12px;
-  color: #ff5c8a;
-  cursor: pointer;
-  font-size: 14px;
+.close-btn {
+  padding: 10px 14px;
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.nav-btn:hover,
+.close-btn:hover {
+  transform: translateY(-1px);
+}
+
+.nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .falling {
   position: fixed;
-  top: -20px;
+  top: -30px;
   animation: fall linear forwards;
   pointer-events: none;
+  user-select: none;
+  z-index: 25;
+}
+
+.fade-out {
+  animation: fadeOut 0.45s ease forwards;
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@keyframes modalIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes fall {
@@ -155,64 +574,119 @@ body {
     opacity: 1;
   }
   100% {
-    transform: translateY(100vh) rotate(360deg);
+    transform: translateY(110svh) rotate(360deg);
     opacity: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .app {
+    padding: 16px;
+  }
+
+  .card-shell {
+    width: 100%;
+    min-height: 82svh;
+    border-radius: 28px;
+  }
+
+  .timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 </style>
 </head>
 
 <body>
+<div class="app">
+  <div class="card-shell">
+    <div class="glow"></div>
+    <div class="glow bottom"></div>
 
-<!-- 1. 케이크 -->
-<div id="screen1" class="screen active">
-  <div class="cake" onclick="start()">🎂</div>
-  <div class="cake-hint">click me</div>
-</div>
+    <section id="screen1" class="screen active" aria-label="intro screen">
+      <div class="stack">
+        <div class="badge">600 DAYS</div>
+        <h1 class="hero-title">우리의 600일을<br />열어볼까?</h1>
+        <p class="hero-subtitle">작은 케이크를 누르면, 우리가 함께한 시간들이 하나씩 펼쳐져.</p>
+        <button id="cakeBtn" class="cake-btn" type="button" aria-label="start the 600 days story">🎂</button>
+        <div class="cake-hint">눌러봐 ✨</div>
+      </div>
+    </section>
 
-<!-- 2. 카운트 -->
-<div id="screen2" class="screen">
-  <div id="counter" class="counter">0</div>
-</div>
+    <section id="screen2" class="screen" aria-label="counting screen">
+      <div class="counter-wrap">
+        <div class="badge">COUNTING</div>
+        <div id="counter" class="counter" aria-live="polite">0</div>
+        <div class="progress-bar" aria-hidden="true">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <div id="counterLabel" class="counter-label">우리의 시간을 세는 중...</div>
+      </div>
+    </section>
 
-<!-- 3. 결과 -->
-<div id="screen3" class="screen">
-  <div class="result" onclick="goTimeline()">Happy 600 Days! 💖</div>
-</div>
+    <section id="screen3" class="screen" aria-label="result screen">
+      <div id="resultCard" class="result-card">
+        <div class="badge">FINALLY</div>
+        <h2 class="result-title">Happy 600 Days! 💖</h2>
+        <p class="result-copy">같이 쌓아온 순간들을 천천히 다시 열어보자.</p>
+        <button id="openTimelineBtn" class="primary-btn" type="button">타임라인 보기</button>
+      </div>
+    </section>
 
-<!-- 4. 타임라인 -->
-<div id="screen4" class="screen">
-  <div class="timeline">
-    <button onclick="showContent('0')">0일</button>
-    <button onclick="showContent('100')">100일</button>
-    <button onclick="showContent('200')">200일</button>
-    <button onclick="showContent('300')">300일</button>
-    <button onclick="showContent('1year')">1년</button>
-    <button onclick="showContent('400')">400일</button>
-    <button onclick="showContent('500')">500일</button>
-    <button onclick="showContent('letter')">💌 Letter</button>
+    <section id="screen4" class="screen timeline-screen" aria-label="timeline screen">
+      <div class="timeline-wrap">
+        <div class="timeline-header">
+          <div class="badge">TIMELINE</div>
+          <h2 class="timeline-title">우리의 순간들</h2>
+          <p class="timeline-desc">눌러서 열어보고, 본 구간은 체크해둘게.</p>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </div>
+    </section>
   </div>
 </div>
 
-<!-- 모달 -->
-<div id="modal" class="modal" onclick="closeModal()">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <img id="modal-img" alt="memory image">
-    <p id="modal-text"></p>
-
-    <div id="nav-wrap" class="nav-wrap">
-      <button class="nav-btn" onclick="prev()">◀</button>
-      <button class="nav-btn" onclick="next()">▶</button>
+<div id="modal" class="modal" aria-hidden="true">
+  <div id="modalContent" class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalSection">
+    <div class="modal-top">
+      <div id="modalSection" class="modal-section">0일</div>
+      <div id="modalProgress" class="modal-progress">1 / 1</div>
     </div>
 
-    <div class="close" onclick="closeModal()">닫기</div>
+    <div class="image-frame">
+      <img id="modal-img" alt="memory image" />
+      <div id="img-fallback" class="img-fallback">이미지를 불러오지 못했어.<br />경로만 한 번 확인해줘.</div>
+    </div>
+
+    <p id="modal-text"></p>
+    <div id="modalTip" class="modal-tip">← → 키로 넘기고, ESC로 닫을 수 있어.</div>
+
+    <div id="nav-wrap" class="nav-wrap">
+      <div class="nav-group">
+        <button id="prevBtn" class="nav-btn" type="button">◀ 이전</button>
+        <button id="nextBtn" class="nav-btn" type="button">다음 ▶</button>
+      </div>
+      <button id="closeBtn" class="close-btn" type="button">닫기</button>
+    </div>
   </div>
 </div>
 
 <script>
-let currentSlides = [];
-let currentIndex = 0;
-
 const sections = {
   '0': {
     slides: [
@@ -334,101 +808,288 @@ const sections = {
   }
 };
 
+const timelineMeta = [
+  { key: '0', label: '0일', sub: '처음의 순간들' },
+  { key: '100', label: '100일', sub: '첫 겨울의 기억' },
+  { key: '200', label: '200일', sub: '봄의 데이트들' },
+  { key: '300', label: '300일', sub: '조금 더 깊어진 우리' },
+  { key: '1year', label: '1년', sub: '제주에서 맞은 1주년' },
+  { key: '400', label: '400일', sub: '함께 쌓인 가을' },
+  { key: '500', label: '500일', sub: '또 한 번의 겨울' },
+  { key: 'letter', label: '💌 Letter', sub: '마지막에 전하는 마음' }
+];
+
+const sectionLabels = Object.fromEntries(timelineMeta.map(item => [item.key, item.label]));
+
+let currentSlides = [];
+let currentIndex = 0;
+let currentSectionKey = '';
+let isCounting = false;
+let startX = null;
+const visitedSections = new Set();
+
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modalContent');
+const modalImg = document.getElementById('modal-img');
+const modalText = document.getElementById('modal-text');
+const modalProgress = document.getElementById('modalProgress');
+const modalSection = document.getElementById('modalSection');
+const modalTip = document.getElementById('modalTip');
+const navWrap = document.getElementById('nav-wrap');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const closeBtn = document.getElementById('closeBtn');
+const imgFallback = document.getElementById('img-fallback');
+const counter = document.getElementById('counter');
+const progressFill = document.getElementById('progressFill');
+const counterLabel = document.getElementById('counterLabel');
+const resultCard = document.getElementById('resultCard');
+
 function switchScreen(n) {
   document.querySelectorAll('.screen').forEach(screen => {
     screen.classList.remove('active');
   });
-  document.getElementById('screen' + n).classList.add('active');
+  document.getElementById(`screen${n}`).classList.add('active');
+
+  if (n === 3) {
+    resultCard.classList.remove('show');
+    void resultCard.offsetWidth;
+    resultCard.classList.add('show');
+  }
 }
 
-function start() {
+function renderTimeline() {
+  const timeline = document.getElementById('timeline');
+  timeline.innerHTML = '';
+
+  timelineMeta.forEach(item => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'timeline-btn';
+    if (visitedSections.has(item.key)) btn.classList.add('visited');
+    if (currentSectionKey === item.key) btn.classList.add('active');
+
+    btn.innerHTML = `
+      <span class="timeline-label">${item.label}</span>
+      <span class="timeline-sub">${item.sub}</span>
+    `;
+
+    btn.addEventListener('click', () => showContent(item.key));
+    timeline.appendChild(btn);
+  });
+}
+
+function animateCounter(target = 600) {
+  if (isCounting) return;
+  isCounting = true;
   switchScreen(2);
-  let n = 0;
-  const counter = document.getElementById('counter');
 
-  const timer = setInterval(() => {
-    n++;
+  const duration = 3200;
+  const startTime = performance.now();
+
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+  const step = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+    const n = Math.round(target * eased);
+
     counter.innerText = n;
+    progressFill.style.width = `${progress * 100}%`;
 
-    if (n >= 600) {
-      clearInterval(timer);
+    if (n < 160) {
+      counterLabel.innerText = '우리의 시간을 세는 중...';
+    } else if (n < 360) {
+      counterLabel.innerText = '하나씩 떠오르는 추억들...';
+    } else if (n < 560) {
+      counterLabel.innerText = '조금만 더, 거의 다 왔어.';
+    } else {
+      counterLabel.innerText = '도착 직전이야 💖';
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      counter.innerText = target;
+      progressFill.style.width = '100%';
+      isCounting = false;
       setTimeout(() => {
         switchScreen(3);
         fireworks();
-      }, 300);
+      }, 320);
     }
-  }, 4);
+  };
+
+  requestAnimationFrame(step);
+}
+
+function start() {
+  const intro = document.querySelector('#screen1 .stack');
+  intro.classList.add('fade-out');
+
+  setTimeout(() => {
+    animateCounter(600);
+    intro.classList.remove('fade-out');
+  }, 360);
 }
 
 function goTimeline() {
   switchScreen(4);
+  renderTimeline();
 }
 
 function fireworks() {
-  for (let i = 0; i < 40; i++) {
+  const icons = ['✨', '💖', '🎉', '🫧'];
+  for (let i = 0; i < 52; i++) {
     const el = document.createElement('div');
     el.className = 'falling';
-    el.innerHTML = Math.random() > 0.5 ? '✨' : '💖';
+    el.textContent = icons[Math.floor(Math.random() * icons.length)];
     el.style.left = Math.random() * 100 + 'vw';
-    el.style.animationDuration = (2 + Math.random() * 2) + 's';
+    el.style.fontSize = (14 + Math.random() * 14) + 'px';
+    el.style.animationDuration = (1.8 + Math.random() * 2.2) + 's';
+    el.style.animationDelay = (Math.random() * 0.15) + 's';
     document.body.appendChild(el);
 
-    setTimeout(() => el.remove(), 3000);
+    setTimeout(() => el.remove(), 4200);
   }
 }
 
-function renderSlide() {
-  const img = document.getElementById('modal-img');
-  const text = document.getElementById('modal-text');
-  const navWrap = document.getElementById('nav-wrap');
 
+function updateNavState() {
+  const isMulti = currentSlides.length > 1;
+  navWrap.style.display = 'flex';
+  prevBtn.style.display = isMulti ? 'inline-flex' : 'none';
+  nextBtn.style.display = isMulti ? 'inline-flex' : 'none';
+  modalProgress.innerText = `${currentSlides.length ? currentIndex + 1 : 0} / ${currentSlides.length}`;
+  prevBtn.disabled = currentIndex === 0;
+  nextBtn.disabled = currentIndex === currentSlides.length - 1;
+}
+
+function setImage(slide) {
+  if (slide.img) {
+    modal.classList.remove('no-image');
+    modalImg.style.display = 'block';
+    imgFallback.style.display = 'none';
+    modalImg.src = slide.img;
+    modalImg.alt = 'memory image';
+  } else {
+    modal.classList.add('no-image');
+    modalImg.removeAttribute('src');
+    modalImg.alt = '';
+  }
+}
+
+modalImg.addEventListener('error', () => {
+  modalImg.style.display = 'none';
+  imgFallback.style.display = 'block';
+});
+
+modalImg.addEventListener('load', () => {
+  if (modalImg.getAttribute('src')) {
+    modalImg.style.display = 'block';
+    imgFallback.style.display = 'none';
+  }
+});
+
+function renderSlide() {
   if (currentSlides.length === 0) return;
 
   const slide = currentSlides[currentIndex];
-  text.innerText = slide.text || '';
+  const isLetter = currentSectionKey === 'letter';
+  modalSection.innerText = sectionLabels[currentSectionKey] || '';
+  modalContent.classList.toggle('letter-mode', isLetter);
+  modalTip.innerText = isLetter
+    ? '마지막 마음까지 천천히 읽어줘.'
+    : '← → 키로 넘기고, ESC로 닫을 수 있어.';
 
-  if (slide.img) {
-    img.style.display = 'block';
-    img.src = slide.img;
-    img.alt = 'memory image';
-  } else {
-    img.style.display = 'none';
-    img.removeAttribute('src');
-    img.alt = '';
-  }
+  setImage(slide);
 
-  navWrap.style.display = currentSlides.length > 1 ? 'block' : 'none';
+  modalText.innerText = slide.text || '';
+
+  updateNavState();
 }
 
 function showContent(type) {
-  const modal = document.getElementById('modal');
   const section = sections[type];
-
   if (!section) return;
 
+  currentSectionKey = type;
   currentSlides = section.slides || [];
   currentIndex = 0;
+  visitedSections.add(type);
 
-  modal.style.display = 'flex';
+  renderTimeline();
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
   renderSlide();
 }
 
 function next() {
-  if (currentSlides.length <= 1) return;
-  currentIndex = (currentIndex + 1) % currentSlides.length;
+  if (currentSlides.length <= 1 || currentIndex >= currentSlides.length - 1) return;
+  currentIndex += 1;
   renderSlide();
 }
 
 function prev() {
-  if (currentSlides.length <= 1) return;
-  currentIndex = (currentIndex - 1 + currentSlides.length) % currentSlides.length;
+  if (currentSlides.length <= 1 || currentIndex <= 0) return;
+  currentIndex -= 1;
   renderSlide();
 }
 
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
 }
-</script>
 
+document.getElementById('cakeBtn').addEventListener('click', start);
+document.getElementById('openTimelineBtn').addEventListener('click', goTimeline);
+prevBtn.addEventListener('click', prev);
+nextBtn.addEventListener('click', next);
+closeBtn.addEventListener('click', closeModal);
+
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) closeModal();
+});
+
+document.addEventListener('keydown', (event) => {
+  const modalOpen = modal.classList.contains('open');
+
+  if (modalOpen) {
+    if (event.key === 'Escape') {
+      closeModal();
+    } else if (event.key === 'ArrowRight') {
+      next();
+    } else if (event.key === 'ArrowLeft') {
+      prev();
+    }
+    return;
+  }
+
+  if (event.key === 'Enter' && document.getElementById('screen1').classList.contains('active')) {
+    start();
+  }
+});
+
+modalContent.addEventListener('touchstart', (event) => {
+  startX = event.touches[0].clientX;
+}, { passive: true });
+
+modalContent.addEventListener('touchend', (event) => {
+  if (startX === null) return;
+  const endX = event.changedTouches[0].clientX;
+  const diff = endX - startX;
+
+  if (Math.abs(diff) > 45) {
+    if (diff < 0) next();
+    else prev();
+  }
+  startX = null;
+}, { passive: true });
+
+renderTimeline();
+</script>
 </body>
 </html>
