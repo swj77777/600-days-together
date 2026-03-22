@@ -621,10 +621,10 @@ button {
     <section id="screen1" class="screen active" aria-label="intro screen">
       <div class="stack">
         <div class="badge">600 DAYS</div>
-        <h1 class="hero-title">우리의 600일을<br />열어볼까?</h1>
-        <p class="hero-subtitle">작은 케이크를 누르면, 우리가 함께한 시간들이 하나씩 펼쳐져.</p>
+        <h1 class="hero-title">Open Our<br />600 Days!</h1>
+        <p class="hero-subtitle"></p>
         <button id="cakeBtn" class="cake-btn" type="button" aria-label="start the 600 days story">🎂</button>
-        <div class="cake-hint">눌러봐 ✨</div>
+        <div class="cake-hint">Click me ✨</div>
       </div>
     </section>
 
@@ -643,7 +643,7 @@ button {
       <div id="resultCard" class="result-card">
         <div class="badge">FINALLY</div>
         <h2 class="result-title">Happy 600 Days! 💖</h2>
-        <p class="result-copy">같이 쌓아온 순간들을 천천히 다시 열어보자.</p>
+        <p class="result-copy">우리가 함께한 600일을 돌아보자.</p>
         <button id="openTimelineBtn" class="primary-btn" type="button">타임라인 보기</button>
       </div>
     </section>
@@ -652,8 +652,8 @@ button {
       <div class="timeline-wrap">
         <div class="timeline-header">
           <div class="badge">TIMELINE</div>
-          <h2 class="timeline-title">우리의 순간들</h2>
-          <p class="timeline-desc">눌러서 열어보고, 본 구간은 체크해둘게.</p>
+          <h2 class="timeline-title">Our Moments</h2>
+          <p class="timeline-desc"></p>
         </div>
         <div id="timeline" class="timeline"></div>
       </div>
@@ -809,14 +809,14 @@ const sections = {
 };
 
 const timelineMeta = [
-  { key: '0', label: '0일', sub: '처음의 순간들' },
-  { key: '100', label: '100일', sub: '첫 겨울의 기억' },
-  { key: '200', label: '200일', sub: '봄의 데이트들' },
-  { key: '300', label: '300일', sub: '조금 더 깊어진 우리' },
-  { key: '1year', label: '1년', sub: '제주에서 맞은 1주년' },
-  { key: '400', label: '400일', sub: '함께 쌓인 가을' },
-  { key: '500', label: '500일', sub: '또 한 번의 겨울' },
-  { key: 'letter', label: '💌 Letter', sub: '마지막에 전하는 마음' }
+  { key: '0', label: '0일'},
+  { key: '100', label: '100일'},
+  { key: '200', label: '200일'},
+  { key: '300', label: '300일'},
+  { key: '1year', label: '1년'},
+  { key: '400', label: '400일'},
+  { key: '500', label: '500일'},
+  { key: 'letter', label: '💌 Letter'}
 ];
 
 const sectionLabels = Object.fromEntries(timelineMeta.map(item => [item.key, item.label]));
@@ -901,9 +901,9 @@ function animateCounter(target = 600) {
     if (n < 160) {
       counterLabel.innerText = '우리의 시간을 세는 중...';
     } else if (n < 360) {
-      counterLabel.innerText = '하나씩 떠오르는 추억들...';
+      counterLabel.innerText = '우리의 추억들...';
     } else if (n < 560) {
-      counterLabel.innerText = '조금만 더, 거의 다 왔어.';
+      counterLabel.innerText = '거의 다 왔어.';
     } else {
       counterLabel.innerText = '도착 직전이야 💖';
     }
@@ -1000,8 +1000,8 @@ function renderSlide() {
   modalSection.innerText = sectionLabels[currentSectionKey] || '';
   modalContent.classList.toggle('letter-mode', isLetter);
   modalTip.innerText = isLetter
-    ? '마지막 마음까지 천천히 읽어줘.'
-    : '← → 키로 넘기고, ESC로 닫을 수 있어.';
+    ? ''
+    : '';
 
   setImage(slide);
 
